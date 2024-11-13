@@ -14,18 +14,51 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-color: #f4f4f4;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      background-size: 200% 200%;
+      animation: backgroundColorShift 10s infinite alternate;
+    }
+
+    @keyframes backgroundColorShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
     .game-container {
       text-align: center;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #185a9d;
+      font-size: 2.5rem;
+      margin: 0;
+      background: linear-gradient(45deg, #43cea2, #185a9d);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .status p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #43cea2;
+      margin-top: 10px;
+      animation: textGlow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from { color: #43cea2; }
+      to { color: #185a9d; }
     }
 
     .board {
       display: grid;
       grid-template-columns: repeat(3, 100px);
       grid-template-rows: repeat(3, 100px);
-      gap: 5px;
+      gap: 10px;
       margin-top: 20px;
       justify-content: center;
     }
@@ -33,30 +66,58 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
     .cell {
       width: 100px;
       height: 100px;
-      background-color: white;
-      border: 2px solid #000;
+      background: #e8f7f2;
+      border: 2px solid #ddd;
+      border-radius: 15px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      font-size: 2.5rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      font-weight: bold;
+      color: #333;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
     }
 
     .cell:hover {
-      background-color: #f0f0f0;
+      background: #d0ece7;
+      transform: scale(1.1);
+    }
+
+    .cell.X {
+      color: #185a9d;
+      animation: markPop 0.3s ease-in-out;
+    }
+
+    .cell.O {
+      color: #43cea2;
+      animation: markPop 0.3s ease-in-out;
+    }
+
+    @keyframes markPop {
+      0% { transform: scale(0.8) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
     }
 
     button {
       margin-top: 20px;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 1rem;
+      font-weight: bold;
+      color: #ffffff;
+      background: linear-gradient(45deg, #43cea2, #185a9d);
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .status p {
-      font-size: 1.5rem;
-      font-weight: bold;
+    button:hover {
+      background: linear-gradient(45deg, #185a9d, #43cea2);
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -92,14 +153,12 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
       const cell = event.target;
       const index = cell.getAttribute("data-index");
 
-      // Ignore the cell if it has already been played or the game is over
       if (board[index] !== "" || gameOver) return;
 
-      // Mark the cell with the current player's symbol
       board[index] = currentPlayer;
       cell.textContent = currentPlayer;
+      cell.classList.add(currentPlayer);
 
-      // Check for a winner or a draw
       if (checkWinner()) {
         status.textContent = `${currentPlayer} wins!`;
         gameOver = true;
@@ -107,7 +166,6 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
         status.textContent = "It's a draw!";
         gameOver = true;
       } else {
-        // Switch to the other player
         currentPlayer = currentPlayer === "X" ? "O" : "X";
         status.textContent = `${currentPlayer}'s turn`;
       }
@@ -139,6 +197,7 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
 
       cells.forEach(cell => {
         cell.textContent = "";
+        cell.classList.remove("X", "O");
       });
     }
 
@@ -148,3 +207,4 @@ Tic-Tac-Toe game using HTML, CSS, and JavaScript. This game allows two players t
   </script>
 </body>
 </html>
+
